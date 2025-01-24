@@ -84,6 +84,7 @@ class VisionMobileAPI:
 class VisionApiClient:
     def __init__(self, input: VisionMobileAPI):
         self.client = ZeepClient(input.get_api_url())
+        self.loginguid = input.loginguid
 
     def ApiVersion(self, apiMin: str, apiMax: str, deviceType: str, appVersion: str):
         return self.client.service.ApiVersion(
@@ -95,147 +96,143 @@ class VisionApiClient:
 
     def ConnectToUnit(
         self,
-        loginguid: str,
         unitindex: int,
     ):
         return self.client.service.ConnectToUnit(
-            loginguid=xsd.AnyObject(xsd.String(), loginguid),
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid),
             unitindex=xsd.AnyObject(xsd.String(), unitindex),
         )
 
     def DelBookUserBookings(
         self,
-        loginguid: str,
         bookindex: int,
     ):
         return self.client.service.DelBookUserBookings(
-            loginguid=xsd.AnyObject(xsd.String(), loginguid),
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid),
             bookindex=xsd.AnyObject(xsd.String(), bookindex),
         )
 
-    def GetAllTerminalMessageLite(self, loginguid: str):
+    def GetAllTerminalMessageLite(self):
         return self.client.service.GetAllTerminalMessageLite(
-            loginguid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
-    def GetBookMachineGroupTypes(self, loginguid: str):
+    def GetBookMachineGroupTypes(self):
         return self.client.service.GetBookMachineGroupTypes(
-            loginguid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
-    def GetBookMachineGroupsCountersLeft(self, loginguid: str):
+    def GetBookMachineGroupsCountersLeft(self):
         return self.client.service.GetBookMachineGroupsCountersLeft(
-            loginguid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
-    def GetBookMachineGroupsFree(self, loginguid: str):
+    def GetBookMachineGroupsFree(self):
         return self.client.service.GetBookMachineGroupsFree(
-            loginguid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
-    def GetBookPrechoices(self, loginguid: str):
+    def GetBookPrechoices(self):
         return self.client.service.GetBookPrechoices(
-            loginguid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
-    def GetBookRandomMachineGroup(self, loginguid: str):
+    def GetBookRandomMachineGroup(self):
         return self.client.service.GetBookRandomMachineGroup(
-            loginguid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
-    def GetBookUnits(self, loginguid: str):
+    def GetBookUnits(self):
         return self.client.service.GetBookUnits(
-            loginguid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
-    def GetBookUserBookingCount(self, loginguid: str):
+    def GetBookUserBookingCount(self):
         return self.client.service.GetBookUserBookingCount(
-            loginguid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
-    def GetBookUserBookings(self, loginguid: str):
+    def GetBookUserBookings(self):
         return self.client.service.GetBookUserBookings(
-            loginguid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
-    def GetBookUserInfo(self, loginguid: str):
+    def GetBookUserInfo(self):
         return self.client.service.GetBookUserInfo(
-            loginguid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
-    def GetBookingCalendarDays(self, loginguid: str, startDate: str, endDate: str):
+    def GetBookingCalendarDays(self, startDate: str, endDate: str):
         return self.client.service.GetBookUserInfo(
-            loginguid=xsd.AnyObject(xsd.String(), loginguid),
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid),
             startDate=xsd.AnyObject(xsd.String(), startDate),
             endDate=xsd.AnyObject(xsd.String(), endDate),
         )
 
-    def GetCardgroupNameBookMachineGroupsFree(self, loginguid: str):
+    def GetCardgroupNameBookMachineGroupsFree(self):
         return self.client.service.GetCardgroupNameBookMachineGroupsFree(
-            loginguid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
-    def GetInformetricUrl(self, loginguid: str):
+    def GetInformetricUrl(self):
         return self.client.service.GetCardgroupNameBookMachineGroupsFree(
-            loginguid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
-    def GetMachineGroups(self, loginguid: str):
+    def GetMachineGroups(self):
         return self.client.service.GetCardgroupNameBookMachineGroupsFree(
-            loginGuid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
-    def GetNextBookMachineGroups(self, loginguid: str):
+    def GetNextBookMachineGroups(self):
         return self.client.service.GetNextBookMachineGroups(
-            loginGuid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
-    def GetOneTerminalMessageLite(self, loginguid: str, messageId: int):
+    def GetOneTerminalMessageLite(self, messageId: int):
         return self.client.service.GetOneTerminalMessageLite(
-            loginGuid=xsd.AnyObject(xsd.String(), loginguid),
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid),
             messageId=xsd.AnyObject(xsd.String(), messageId),
         )
 
-    def GetShowBooked(self, loginguid: str):
+    def GetShowBooked(self):
         return self.client.service.GetShowBooked(
-            loginGuid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
-    def GetSystemDate(self, loginguid: str):
+    def GetSystemDate(self):
         return self.client.service.GetSystemDate(
-            loginGuid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
     def GetSystemName(self):
         return self.client.service.GetSystemName()
 
-    def GetTerminalMessageImage(
-        self, loginguid: str, messageId: int, isHeaderImage: bool
-    ):
+    def GetTerminalMessageImage(self, messageId: int, isHeaderImage: bool):
         return self.client.service.GetTerminalMessageImage(
-            loginGuid=xsd.AnyObject(xsd.String(), loginguid),
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid),
             messageId=xsd.AnyObject(xsd.String(), messageId),
             isHeaderImage=xsd.AnyObject(xsd.String(), isHeaderImage),
         )
 
-    def GetUserBalance(self, loginguid: str):
+    def GetUserBalance(self):
         return self.client.service.GetUserBalance(
-            loginGuid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
-    def GetUserData(self, loginguid: str):
+    def GetUserData(self):
         return self.client.service.GetUserData(
-            loginGuid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
-    def GetWebAccess(self, loginguid: str):
+    def GetWebAccess(self):
         return self.client.service.GetWebAccess(
-            loginGuid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
-    def GetWebAppAddress(self, loginguid: str):
+    def GetWebAppAddress(self):
         return self.client.service.GetWebAppAddress(
-            loginGuid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
     def Login(self, systemname: str, username: str, password: str, timeout: int):
@@ -246,31 +243,31 @@ class VisionApiClient:
             timeout=xsd.AnyObject(xsd.String(), timeout),
         )
 
-    def Logout(self, loginguid: str):
+    def Logout(self):
         return self.client.service.Logout(
-            loginGuid=xsd.AnyObject(xsd.String(), loginguid)
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
-    def SetBookMachineGroup(self, loginguid: str, machinegroupindex: str):
+    def SetBookMachineGroup(self, machinegroupindex: str):
         return self.client.service.Logout(
             machinegroupindex=xsd.AnyObject(xsd.String(), machinegroupindex)
         )
 
-    def SetBookMachineGroupTypes(self, loginguid: str, typeindex: str):
+    def SetBookMachineGroupTypes(self, typeindex: str):
         return self.client.service.SetBookMachineGroupTypes(
-            loginguid=xsd.AnyObject(xsd.String(), loginguid),
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid),
             typeindex=xsd.AnyObject(xsd.String(), typeindex),
         )
 
-    def SetBookPass(self, loginguid: str, SystemDate: str, passindex: str):
+    def SetBookPass(self, SystemDate: str, passindex: str):
         return self.client.service.SetBookMachineGroupTypes(
-            loginguid=xsd.AnyObject(xsd.String(), loginguid),
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid),
             SystemDate=xsd.AnyObject(xsd.String(), SystemDate),
             passindex=xsd.AnyObject(xsd.String(), passindex),
         )
 
-    def SetBookPrechoises(self, loginguid: str, prechoiseindex: str):
+    def SetBookPrechoises(self, prechoiseindex: str):
         return self.client.service.Logout(
-            loginGuid=xsd.AnyObject(xsd.String(), loginguid),
+            loginguid=xsd.AnyObject(xsd.String(), self.loginguid),
             prechoiseindex=xsd.AnyObject(xsd.String(), prechoiseindex),
         )
