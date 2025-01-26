@@ -1,7 +1,7 @@
 import json
 
-from zeep import Client, xsd
-from zeep import xsd as ZeepClient
+from zeep import Client as ZeepClient
+from zeep import xsd
 
 
 class VisionMobileAPI:
@@ -9,7 +9,7 @@ class VisionMobileAPI:
         self.domain = domain
         self.username = username
         self.password = password
-        self.client = Client(self.get_wsdl_url())
+        self.client = ZeepClient(self.get_wsdl_url())
         self.api = self.client.service
         self.loginguid = loginguid
         self.room_list = room_list
@@ -27,7 +27,7 @@ class VisionMobileAPI:
 
     def fromJSON(i_json: json):
         data = json.loads(i_json)
-        return super(
+        return VisionMobileAPI(
             domain=data["domain"],
             username=data["username"],
             password=data["password"],
@@ -44,10 +44,13 @@ class VisionMobileAPI:
                 return
 
         print("Logging in...")
-        self.loginguid = self.api.Login(
-            username=xsd.AnyObject(xsd.String(), self.username),
-            Password=xsd.AnyObject(xsd.String(), self.password),
-            timeout=30,
+        client = VisionApiClient(self)
+        print(client.__dict__)
+        self.loginguid = client.Login(
+            systemname=client.GetSystemName(),
+            username=self.username,
+            password=self.password,
+            timeout=300,
         )
         return self.loginguid
 
@@ -83,7 +86,7 @@ class VisionMobileAPI:
 
 class VisionApiClient:
     def __init__(self, input: VisionMobileAPI):
-        self.client = ZeepClient(input.get_api_url())
+        self.client = ZeepClient(input.get_wsdl_url())
         self.loginguid = input.loginguid
 
     def ApiVersion(self, apiMin: str, apiMax: str, deviceType: str, appVersion: str):
@@ -239,8 +242,8 @@ class VisionApiClient:
         return self.client.service.Login(
             systemname=xsd.AnyObject(xsd.String(), systemname),
             username=xsd.AnyObject(xsd.String(), username),
-            password=xsd.AnyObject(xsd.String(), password),
-            timeout=xsd.AnyObject(xsd.String(), timeout),
+            Password=xsd.AnyObject(xsd.String(), password),
+            timeout=timeout,
         )
 
     def Logout(self):
