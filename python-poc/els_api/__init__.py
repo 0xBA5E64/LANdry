@@ -164,7 +164,7 @@ class VisionApiClient:
         )
 
     def GetBookingCalendarDays(self, startDate: str, endDate: str):
-        return self.client.service.GetBookUserInfo(
+        return self.client.service.GetBookingCalendarDays(
             loginguid=xsd.AnyObject(xsd.String(), self.loginguid),
             startDate=xsd.AnyObject(xsd.String(), startDate),
             endDate=xsd.AnyObject(xsd.String(), endDate),
@@ -176,12 +176,12 @@ class VisionApiClient:
         )
 
     def GetInformetricUrl(self):
-        return self.client.service.GetCardgroupNameBookMachineGroupsFree(
+        return self.client.service.GetInformetricUrl(
             loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
     def GetMachineGroups(self):
-        return self.client.service.GetCardgroupNameBookMachineGroupsFree(
+        return self.client.service.GetMachineGroups(
             loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
         )
 
@@ -250,7 +250,7 @@ class VisionApiClient:
         )
 
     def SetBookMachineGroup(self, machinegroupindex: str):
-        return self.client.service.Logout(
+        return self.client.service.SetBookMachineGroup(
             machinegroupindex=xsd.AnyObject(xsd.String(), machinegroupindex)
         )
 
@@ -261,14 +261,14 @@ class VisionApiClient:
         )
 
     def SetBookPass(self, SystemDate: str, passindex: str):
-        return self.client.service.SetBookMachineGroupTypes(
+        return self.client.service.SetBookPass(
             loginguid=xsd.AnyObject(xsd.String(), self.loginguid),
             SystemDate=xsd.AnyObject(xsd.String(), SystemDate),
             passindex=xsd.AnyObject(xsd.String(), passindex),
         )
 
     def SetBookPrechoises(self, prechoiseindex: str):
-        return self.client.service.Logout(
+        return self.client.service.SetBookPrechoises(
             loginguid=xsd.AnyObject(xsd.String(), self.loginguid),
             prechoiseindex=xsd.AnyObject(xsd.String(), prechoiseindex),
         )
