@@ -55,13 +55,11 @@ class VisionMobileAPI:
         return self.loginguid
 
     def check_login_status(self):
-        req: str = self.api.GetUserData(
-            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
-        )
+        client = VisionApiClient(self)
+        req = client.GetUserData()
         if req is None:
             return False
-        status: int = req[0]
-        if status == -1:
+        if req[0] == -1:
             return False
 
         return True
