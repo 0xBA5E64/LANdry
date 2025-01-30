@@ -6,44 +6,52 @@ from els_api import VisionMobileAPI
 
 
 def main():
+    my_landromat = restore_session(state_file="./.landry-state")
+
+    # my_landromat.get_room_list(force_refresh=False)
+    # print(my_landromat.get_room_list())
+
+    # Get all slots for the next week
+    book_days = my_landromat.get_booking_days(
+        room_index=8,
+        start_date=date.today() + timedelta(days=2),
+        end_date=date.today() + timedelta(days=4),
+    )
+    for op in book_days:
+        print(op)
+
+    save_session(my_landromat)
+
+
+# ---
+
+
+def restore_session(state_file: str = "./.landry-state") -> VisionMobileAPI:
     load_dotenv()
-
-    my_landromat: VisionMobileAPI | None = None
-
     # Caching: Check if a cache file exists, if so, restore it.
     # Otherwise, make a new one.
-    CACHE_FILE = "./.landry-state"
-    if os.path.exists(CACHE_FILE):
+    if os.path.exists(state_file):
         print("Found Cached instance! Restoring...")
-        with open(CACHE_FILE, "r") as file:
-            my_landromat = VisionMobileAPI.fromJSON(i_json=file.read())
+        with open(state_file, "r") as file:
+            session = VisionMobileAPI.fromJSON(i_json=file.read())
     else:
         print("No cached instance found, making new one")
-        my_landromat = VisionMobileAPI(
+        session = VisionMobileAPI(
             domain=os.getenv("ELS_SITE"),
             username=os.getenv("ELS_USER"),
             password=os.getenv("ELS_PSWD"),
         )
 
     # Check if we're logged in or not, if we aren't: Log In!
-    if my_landromat.check_login_status() is False:
-        my_landromat.login()
+    if session.check_login_status() is False:
+        session.login()
+    return session
 
-    # Do the stuff now:
-    print(f"Are we logged in: {my_landromat.check_login_status()}")
 
-    my_landromat.get_room_list(force_refresh=False)
-    print(my_landromat.get_room_list())
-
-    book_days = my_landromat.get_booking_days(
-        8, end_date=date.today() + timedelta(days=7)
-    )
-    for op in book_days:
-        print(op)
-
+def save_session(session: VisionMobileAPI, state_file: str = "./.landry-state"):
     # Save our session before exiting
-    with open(CACHE_FILE, "w") as file:
-        file.write(my_landromat.toJSON())
+    with open(state_file, "w") as file:
+        file.write(session.toJSON())
 
 
 if __name__ == "__main__":

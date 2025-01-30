@@ -95,11 +95,15 @@ class VisionMobileAPI:
         """Returns a list of days with booking oppertunities for the room selected.
         By default it'll return today's bookings."""
         client = VisionApiClient(self)
+        client.GetUserData()  # <- This is completely uneccecary on a technical level but shit somehow breaks without it.
         client.SetBookPrechoises(prechoiseindex=8)
         api_response = client.GetBookingCalendarDays(
             startDate=start_date.isoformat(), endDate=end_date.isoformat()
         )
+        if api_response[0] == -1:
+            raise Exception("API Returned error.")
         out = list()
+        print(api_response)
         for day in api_response:
             for session in day["BookPasses"]["BookDayPass"]:
                 out.append(
