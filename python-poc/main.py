@@ -1,8 +1,7 @@
 import os
 
 from dotenv import load_dotenv
-from els_api import VisionMobileAPI
-from zeep import xsd
+from els_api import VisionApiClient, VisionMobileAPI
 
 
 def main():
@@ -35,20 +34,12 @@ def main():
     my_landromat.get_room_list(force_refresh=False)
     print(my_landromat.get_room_list())
 
-    print(
-        my_landromat.api.SetBookPrechoises(
-            loginguid=xsd.AnyObject(xsd.String(), my_landromat.loginguid),
-            prechoiseindex=xsd.AnyObject(xsd.String(), "8"),
-        )
+    client = VisionApiClient(my_landromat)
+    client.SetBookPrechoises(prechoiseindex=8)
+    book_days = client.GetBookingCalendarDays(
+        startDate="2025-01-24", endDate="2025-01-30"
     )
-
-    print(
-        my_landromat.api.GetBookingCalendarDays(
-            loginguid=xsd.AnyObject(xsd.String(), my_landromat.loginguid),
-            startDate=xsd.AnyObject(xsd.String(), "2025-01-24"),
-            endDate=xsd.AnyObject(xsd.String(), "2025-01-30"),
-        )
-    )
+    print(book_days)
 
     # Save our session before exiting
     with open(CACHE_FILE, "w") as file:
