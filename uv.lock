@@ -60,16 +60,27 @@ wheels = [
 ]
 
 [[package]]
+name = "jsonpickle"
+version = "4.0.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/4c/86/82c2829c3160dc5d6d8ec749c4fe18a87fdd001a13b441f2dbc21d8c7214/jsonpickle-4.0.1.tar.gz", hash = "sha256:b5336144d902958b92cb08bc1e76bfa47199b8afd454303693894defd2fa50c5", size = 314587 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/86/7c/c06580145924f60342f669f6e71905f838083d00e4b141172a75d22a23fc/jsonpickle-4.0.1-py3-none-any.whl", hash = "sha256:2973c0b0d988c6792ed6c446fa582c48352e79c2880fa2c013f1abde15905555", size = 46239 },
+]
+
+[[package]]
 name = "landry"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "jsonpickle" },
     { name = "python-dotenv" },
     { name = "zeep" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "jsonpickle", specifier = ">=4.0.1" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "zeep", specifier = ">=4.3.1" },
 ]

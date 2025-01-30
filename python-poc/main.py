@@ -1,4 +1,5 @@
 import os
+from datetime import date, timedelta
 
 from dotenv import load_dotenv
 from els_api import VisionMobileAPI
@@ -34,8 +35,11 @@ def main():
     my_landromat.get_room_list(force_refresh=False)
     print(my_landromat.get_room_list())
 
-    book_days = my_landromat.get_booking_days(8)
-    print(book_days)
+    book_days = my_landromat.get_booking_days(
+        8, end_date=date.today() + timedelta(days=7)
+    )
+    for op in book_days:
+        print(op)
 
     # Save our session before exiting
     with open(CACHE_FILE, "w") as file:

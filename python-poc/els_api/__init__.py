@@ -1,6 +1,7 @@
 import json
-from datetime import date
+from datetime import date, time
 
+import jsonpickle
 from zeep import Client as ZeepClient
 from zeep import xsd
 
@@ -95,10 +96,31 @@ class VisionMobileAPI:
         By default it'll return today's bookings."""
         client = VisionApiClient(self)
         client.SetBookPrechoises(prechoiseindex=8)
-        book_days = client.GetBookingCalendarDays(
+        api_response = client.GetBookingCalendarDays(
             startDate=start_date.isoformat(), endDate=end_date.isoformat()
         )
-        return book_days
+        out = list()
+        for day in api_response:
+            for session in day["BookPasses"]["BookDayPass"]:
+                out.append(
+                    BookPass(
+                        book_date=date.fromisoformat(day["BookDate"]),
+                        pass_index=session["PassIndex"],
+                        start_time=time.fromisoformat(session["StartTime"]),
+                        end_time=time.fromisoformat(session["EndTime"]),
+                        is_free=session["PassAvailability"]["Availability"][0][
+                            "IsFree"
+                        ],
+                        is_bookable=session["PassAvailability"]["Availability"][0][
+                            "IsBookable"
+                        ],
+                        has_anything_booked=session["PassAvailability"]["Availability"][
+                            0
+                        ]["HasAnythingBooked"],
+                    )
+                )
+
+        return out
 
 
 class VisionApiClient:
@@ -291,3 +313,34 @@ class VisionApiClient:
             loginguid=xsd.AnyObject(xsd.String(), self.loginguid),
             prechoiseindex=xsd.AnyObject(xsd.String(), prechoiseindex),
         )
+
+
+class BookPass:
+    book_date: date
+    pass_index: int
+    start_time: time
+    end_time: time
+    is_free: bool
+    is_bookable: bool
+    has_anything_booked: bool
+
+    def __init__(
+        self,
+        book_date: date,
+        pass_index: int,
+        start_time: time,
+        end_time: time,
+        is_free: bool,
+        is_bookable: bool,
+        has_anything_booked: bool,
+    ):
+        self.book_date = book_date
+        self.pass_index = pass_index
+        self.start_time = start_time
+        self.end_time = end_time
+        self.is_free = is_free
+        self.is_bookable = is_bookable
+        self.has_anything_booked = has_anything_booked
+
+    def __str__(self):
+        return f"{self.book_date.isoformat()} / {self.start_time.isoformat()} - {self.end_time.isoformat()} {'(booked)' if not self.is_free else ''}"
