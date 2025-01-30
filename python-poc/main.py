@@ -1,7 +1,7 @@
 import os
 
 from dotenv import load_dotenv
-from els_api import VisionApiClient, VisionMobileAPI
+from els_api import VisionMobileAPI
 
 
 def main():
@@ -34,11 +34,7 @@ def main():
     my_landromat.get_room_list(force_refresh=False)
     print(my_landromat.get_room_list())
 
-    client = VisionApiClient(my_landromat)
-    client.SetBookPrechoises(prechoiseindex=8)
-    book_days = client.GetBookingCalendarDays(
-        startDate="2025-01-24", endDate="2025-01-30"
-    )
+    book_days = my_landromat.get_booking_days(8)
     print(book_days)
 
     # Save our session before exiting

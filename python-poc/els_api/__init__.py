@@ -1,4 +1,5 @@
 import json
+from datetime import date
 
 from zeep import Client as ZeepClient
 from zeep import xsd
@@ -64,22 +65,40 @@ class VisionMobileAPI:
 
         return True
 
-    def get_room_list(self, force_refresh=False):
-        if self.room_list is not None and force_refresh is False:
-            return self.room_list
-        choices = self.client.service.GetUserData(
-            loginguid=xsd.AnyObject(xsd.String(), self.loginguid)
-        )[1]["Units"]["MobileUnit"][0]["PreChoises"]["MobilePreChoise"]
-        self.room_list = dict()
-        for alternative in choices:
-            self.room_list[alternative["Index"]] = alternative["Name"]
-        return self.room_list
-
     def get_api_url(self):
         return f"https://{self.domain}/booking/Api/Mobile/VisionMobile.asmx"
 
     def get_wsdl_url(self):
         return f"{self.get_api_url()}?WSDL"
+
+    def get_room_list(self, force_refresh=False) -> dict:
+        """Returns a dict list of all bookable rooms and with their respective index numbers as keys for use with get_booking_calendar."""
+        if self.room_list is not None and force_refresh is False:
+            return self.room_list
+
+        client = VisionApiClient(self)
+        choices = client.GetUserData()[1]["Units"]["MobileUnit"][0]["PreChoises"][
+            "MobilePreChoise"
+        ]
+        self.room_list = dict()
+        for alternative in choices:
+            self.room_list[alternative["Index"]] = alternative["Name"]
+        return self.room_list
+
+    def get_booking_days(
+        self,
+        room_index: int,
+        start_date: date = date.today(),
+        end_date: date = date.today(),
+    ):
+        """Returns a list of days with booking oppertunities for the room selected.
+        By default it'll return today's bookings."""
+        client = VisionApiClient(self)
+        client.SetBookPrechoises(prechoiseindex=8)
+        book_days = client.GetBookingCalendarDays(
+            startDate=start_date.isoformat(), endDate=end_date.isoformat()
+        )
+        return book_days
 
 
 class VisionApiClient:
