@@ -14,8 +14,8 @@ def main():
     # Get all slots for the next week
     book_days = my_landromat.get_booking_days(
         room_index=8,
-        start_date=date.today() + timedelta(days=2),
-        end_date=date.today() + timedelta(days=4),
+        start_date=date.today(),
+        end_date=date.today() + timedelta(days=7),
     )
     for op in book_days:
         print(op)
