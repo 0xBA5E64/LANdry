@@ -96,7 +96,7 @@ class VisionMobileAPI:
         By default it'll return today's bookings."""
         client = VisionApiClient(self)
         client.GetUserData()  # <- This is completely uneccecary on a technical level but shit somehow breaks without it.
-        client.SetBookPrechoises(prechoiseindex=8)
+        client.SetBookPrechoises(prechoiseindex=room_index)
         api_response = client.GetBookingCalendarDays(
             startDate=start_date.isoformat(), endDate=end_date.isoformat()
         )
@@ -109,6 +109,7 @@ class VisionMobileAPI:
                 out.append(
                     BookPass(
                         book_date=date.fromisoformat(day["BookDate"]),
+                        room_index=room_index,
                         pass_index=session["PassIndex"],
                         start_time=time.fromisoformat(session["StartTime"]),
                         end_time=time.fromisoformat(session["EndTime"]),
@@ -321,6 +322,7 @@ class VisionApiClient:
 
 class BookPass:
     book_date: date
+    room_index: int
     pass_index: int
     start_time: time
     end_time: time
@@ -331,6 +333,7 @@ class BookPass:
     def __init__(
         self,
         book_date: date,
+        room_index: int,
         pass_index: int,
         start_time: time,
         end_time: time,
@@ -339,6 +342,7 @@ class BookPass:
         has_anything_booked: bool,
     ):
         self.book_date = book_date
+        self.room_index = room_index
         self.pass_index = pass_index
         self.start_time = start_time
         self.end_time = end_time
