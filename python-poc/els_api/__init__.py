@@ -351,4 +351,7 @@ class BookPass:
         self.has_anything_booked = has_anything_booked
 
     def __str__(self):
-        return f"{self.book_date.isoformat()} / {self.start_time.isoformat()} - {self.end_time.isoformat()} {'(booked)' if not self.is_free else ''}"
+        date = self.book_date.isoformat()
+        timerange = f"{self.start_time.isoformat()} - {self.end_time.isoformat()}"
+        booked_str = "(booked)" if not self.is_free else ""
+        return f"{date} / {timerange} {booked_str}"
