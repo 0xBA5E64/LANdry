@@ -1,7 +1,7 @@
 import json
+import logging
 from datetime import date, time
 
-import jsonpickle
 from zeep import Client as ZeepClient
 from zeep import xsd
 
@@ -15,6 +15,7 @@ class VisionMobileAPI:
         self.api = self.client.service
         self.loginguid = loginguid
         self.room_list = room_list
+        self.logger = logging.getLogger(__name__)
 
     def toJSON(self):
         return json.dumps(
@@ -42,12 +43,12 @@ class VisionMobileAPI:
         if self.loginguid is not None:
             # If so, check if if's still valid
             if self.check_login_status():
-                print("Already have a valid login UUID")
+                self.logger.info("Already have a valid login UUID")
                 return
 
-        print("Logging in...")
+        self.logger.info("Logging in...")
         client = VisionApiClient(self)
-        print(client.__dict__)
+        self.logger.debug(client.__dict__)
         self.loginguid = client.Login(
             systemname=client.GetSystemName(),
             username=self.username,
@@ -103,7 +104,7 @@ class VisionMobileAPI:
         if api_response[0] == -1:
             raise Exception("API Returned error.")
         out = list()
-        print(api_response)
+        self.logger.debug(api_response)
         for day in api_response:
             for session in day["BookPasses"]["BookDayPass"]:
                 out.append(
